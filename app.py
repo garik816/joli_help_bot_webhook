@@ -3,13 +3,20 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 from flask import make_response
+from googleapiclient.discovery import build
+import json
+import requests
 
 # initialize the flask app
 app = Flask(__name__)
 
-#def googleSearch(request):
-#    response = GoogleSearch().search(request)
-#    return {response}	
+my_api_key = "AIzaSyAL-FNUcVnrxThJO5JEwz_VPxzqRJnjbJo"
+my_cse_id = "016982423635796478701:vbd7wfy6qei"
+
+def google_search_txt(search_term, api_key, cse_id, **kwargs):
+    service = build("customsearch", "v1", developerKey=api_key)
+    res = service.cse().list(q=search_term, cx=cse_id, **kwargs).execute()
+    return res['items'][0]['link']
 
 # function for responses
 def results():
@@ -19,10 +26,9 @@ def results():
     # fetch action from json
     quaeryAction = req.get('queryResult').get('action')
     quaeryText = req.get('queryResult').get('queryText')
-#   response = googleSearch(quaeryText)
 
     # return a fulfillment response!
-    return {'fulfillmentText': quaeryText}	
+    return {'fulfillmentText': google_search_txt(quaeryText, my_api_key, my_cse_id, num=3)}	
 
 # create a route for webhook
 @app.route('/webhook', methods=['GET', 'POST'])

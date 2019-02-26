@@ -1,2 +1,4 @@
 Flask
 future
+google-api-python-client
+requests

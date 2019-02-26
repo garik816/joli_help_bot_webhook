@@ -1,5 +1,5 @@
 # import flask dependencies
-from flask import Flask 
+from flask import Flask
 from flask import jsonify
 from flask import request
 from flask import make_response
@@ -34,7 +34,7 @@ def results():
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
     # return response
-    return make_response(jsonify(results()))	
+    return make_response(jsonify(results()))
 
 # run the app
 if __name__ == '__main__':
